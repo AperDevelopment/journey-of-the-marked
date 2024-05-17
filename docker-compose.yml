@@ -1,0 +1,9 @@
+services:
+  front:
+    image: node:22-alpine
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    ports:
+      - 80:3000
+    command: npm run dev
