@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { usePathname } from 'next/navigation'
 import Link from './Link';
 import { useUserContext } from '../contexts/userContext';
@@ -11,10 +11,21 @@ const Header: React.FC = () => {
 
     const { user, setUser } = useUserContext();
 
+    const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
+
     const handleLogout = () => {
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
         setUser(null);
+    };
+
+    const handleOver = () => {
+        setIsMenuVisible(true);
+        console.log('caca')
+    };
+
+    const handleOut = () => {
+        setIsMenuVisible(false);
     };
 
     return (
@@ -22,20 +33,22 @@ const Header: React.FC = () => {
             <h1 className='text-xl'>
                 <a href='/'>Journey of the Marked</a>
             </h1>
-
-            <div>
-                {user ? (
-                    <div className='flex space-x-3 items-center'>
-                        <p>Bonjour {user.name}!</p>
-                        <Button onClick={handleLogout}>Logout</Button>
+            {user ? (
+                <div className='relative' onMouseOver={handleOver} onMouseOut={handleOut}>
+                    <a href={'user/' + user.name}>Bonjour {user.name}!</a>
+                    <div className={'absolute top-0 right-0 pt-[25%] w-full' + (isMenuVisible ? '' : ' invisible')}>
+                        <div className='flex flex-col w-fit min-w-full h-fit p-1.5 bg-gray-300 dark:bg-gray-800 rounded-lg text-left'>
+                            <a href={'user/' + user.name}>Profile</a>
+                            <a href='#' onClick={handleLogout}>Logout</a>
+                        </div>
                     </div>
-                ) : (
-                    <div className='space-x-3'>
-                        <Link href={'/login' + from}>Login</Link>
-                        <Link href={'/register' + from}>Register</Link>
-                    </div>
-                )}
-            </div>
+                </div>
+            ) : (
+                <div className='space-x-3'>
+                    <Link href={'/login' + from}>Login</Link>
+                    <Link href={'/register' + from}>Register</Link>
+                </div>
+            )}
         </header>
     );
 };

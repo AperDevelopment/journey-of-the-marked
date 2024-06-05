@@ -26,7 +26,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
         }
     }, [user]);
     return (
-        <html lang="fr">
+        <html lang="fr" className="ltr">
             <UserContext.Provider value={{user, setUser}}>
                 <body>
                     <Header/>
